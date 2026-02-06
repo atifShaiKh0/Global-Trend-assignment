@@ -6,6 +6,40 @@ Brief README with setup and run instructions for the backend and frontend.
 
 - Node.js (v18+ recommended)
 - npm (or pnpm/yarn)
+- Docker (for MongoDB)
+
+## MongoDB Setup with Docker
+
+Start a MongoDB container using Docker:
+
+```bash
+docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password mongo:latest
+```
+
+Or using Docker Compose, create a `docker-compose.yml` in the root:
+
+```yaml
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
+```
+
+Then run:
+
+```bash
+docker-compose up -d
+```
 
 ## Backend (API)
 
@@ -21,26 +55,14 @@ cd backend
 npm install
 ```
 
-3. Create an environment file at `backend/.env` with at least the following variables:
+3. Create an environment file at `backend/.env` with your MongoDB connection string:
 
 ```
-
-## I have used mongodb in docker not locally so first start a mongodb container in docker then run node index.js in backend/src folder
-
-DATABASE_URL="file:./dev.db" 
+DATABASE_URL="mongodb+srv://admin:password@localhost:27017/task-management?authSource=admin"
 PORT=4000
 ```
 
-Adjust `DATABASE_URL` to your database (Postgres, MySQL, etc.) if you are not using SQLite.
-
-4. Run Prisma migrations and seed (if needed):
-
-```bash
-npm run db:migrate
-npm run db:seed
-```
-
-5. Start the backend in development mode:
+4. Start the backend in development mode:
 
 ```bash
 npm run dev
@@ -70,7 +92,19 @@ This will start Vite and open the frontend on the port Vite reports (usually 517
 
 ## Running both locally
 
-Open two terminals (or use your preferred terminal multiplexer):
+1. Start MongoDB container:
+
+```bash
+docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password mongo:latest
+```
+
+Or if using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+2. Open two terminals (or use your preferred terminal multiplexer):
 
 Terminal 1 (backend):
 
@@ -85,7 +119,16 @@ Terminal 2 (frontend):
 cd frontend
 npm run dev
 ```
+## Tests & linting
 
+- Backend tests (if present):
+
+```bash
+cd backend
+npm test
+```
+
+- Frontend lint/format:
 
 ```bash
 cd frontend
@@ -93,8 +136,24 @@ npm run lint
 npm run format
 ```
 
+## Stopping MongoDB
+
+To stop the MongoDB container:
+
+```bash
+docker stop mongodb
+docker rm mongodb
+```
+
+Or with Docker Compose:
+
+```bash
+docker-compose down
+```
+
 ## Notes
 
 - Backend scripts available: `dev`, `start`, `db:migrate`, `db:push`, `db:seed`.
 - Frontend scripts available: `dev`, `build`, `preview`.
-- If you need help creating a `.env` file or configuring a production database, tell me which DB you want and I can provide an example `DATABASE_URL`.
+- MongoDB runs on port `27017` by default.
+- Ensure MongoDB is running before starting the backend.
