@@ -16,31 +16,6 @@ Start a MongoDB container using Docker:
 docker run -d --name mongodb -p 27017:27017 -e MONGO_INITDB_ROOT_USERNAME=admin -e MONGO_INITDB_ROOT_PASSWORD=password mongo:latest
 ```
 
-Or using Docker Compose, create a `docker-compose.yml` in the root:
-
-```yaml
-version: '3.8'
-services:
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: password
-    volumes:
-      - mongo_data:/data/db
-
-volumes:
-  mongo_data:
-```
-
-Then run:
-
-```bash
-docker-compose up -d
-```
-
 ## Backend (API)
 
 1. Open a terminal and go to the backend folder:
