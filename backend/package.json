@@ -1,0 +1,33 @@
+{
+  "name": "task-management-backend",
+  "version": "1.0.0",
+  "description": "Senior-level Task Management API",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "node prisma/seed.js",
+    "test": "node --test tests/**/*.test.js",
+    "lint": "eslint src",
+    "format": "prettier --write 'src/**/*.js'"
+  },
+  "keywords": ["task", "management", "api"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "helmet": "^7.1.0",
+    "express-validator": "^7.0.0",
+    "dotenv": "^16.3.1",
+    "uuid": "^9.0.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.7.1",
+    "@types/node": "^20.10.6",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1"
+  }
+}
